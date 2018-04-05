@@ -22,7 +22,7 @@ import javax.xml.transform.sax.SAXResult;
 import com.google.gson.Gson;
 
 import entities.*;
-import model.*;
+
 import dbconnectionlib.DbConnection;
 
 /**
@@ -93,8 +93,43 @@ public class AjaxController extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		String veri,data;
+	      String mod;
+	      PrintWriter out= response.getWriter();
+	      DbConnection db=new DbConnection();
+	      
+	      
+	      
+	      mod=request.getParameter("mod");
+	      
+	      if(mod.equalsIgnoreCase("3")) {
+	    	  veri=request.getParameter("dersAd");
+	      }else if(mod.equalsIgnoreCase("4")) {
+	    	  veri=request.getParameter("dersIcerik");
+	      }else {
+	    	  veri=request.getParameter("dersKodu");
+	      }
+	      
+	      db.updateTable(veri, mod);
+	      
+	      
+	      
 	}
+	
+	@Override
+	  protected void doPut(HttpServletRequest req, HttpServletResponse resp)
+	          throws ServletException, IOException {
+	      /*String veri;
+	      String mod;
+	      PrintWriter out= resp.getWriter();
+	      DbConnection db=new DbConnection();
+	      
+	      
+	      mod=req.getParameter("veri");
+	      
+	      out.print(mod);*/
+	  }
+	
+	
 
 }

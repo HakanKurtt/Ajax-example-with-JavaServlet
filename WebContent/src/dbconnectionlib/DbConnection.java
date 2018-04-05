@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import model.DersModel;
+
 import entities.Ders;
 
 public class DbConnection {
@@ -35,7 +35,7 @@ public class DbConnection {
 			System.out.println("Mysql driver not found"+e);
 		}
 		
-		String url="jdbc:mysql://localhost:3306/dersler";
+		String url="jdbc:mysql://localhost:3306/dersler?useUnicode=true&characterEncoding=UTF-8";
 		String user="root";
 		String password="";
 		
@@ -67,16 +67,37 @@ public class DbConnection {
 		}finally {System.out.println("Ekleme iþlemi baþarýlý!");}
 	}
 	
-	public static void updateTable(String dKodu,String dAdi,String dIcerik) {
+	public static void updateTable(String veri,String mod) {
+		
+		int modu=Integer.parseInt(mod);
+		
+		PreparedStatement update=null;
 		
 		try {
 			Connection con=getConnection();
-			PreparedStatement update=con.prepareStatement("UPDATE ders SET dersKodu = ?, dersAdi = ?, dersIcerik = ? WHERE id=1");
+			if(modu==1) { //tüm tabloyu
+				/*update=con.prepareStatement("UPDATE ders SET dersKodu = ?, dersAdi = ?, dersIcerik = ? WHERE id=1");
+				
+				//preparedstatement parametrelerini ayarla.
+				update.setString(1, dKodu);
+				update.setString(2, dAdi);
+				update.setString(3, dIcerik);
+				*/
+			}else if(modu==2) { //sadece ders kodunu
+				update=con.prepareStatement("UPDATE ders SET dersKodu = ? WHERE id=1");
+				
+				update.setString(1, veri);
+			}else if(modu==3) {//sadece ders adýný
+				update=con.prepareStatement("UPDATE ders SET dersAdi = ? WHERE id=1");
+				
+				update.setString(1, veri);
+			}else if(modu==4) {//sadece dersIcerigini
+				update=con.prepareStatement("UPDATE ders SET dersIcerik = ? WHERE id=1");
+				
+				update.setString(1, veri);
+			}
 			
-			//preparedstatement parametrelerini ayarla.
-			update.setString(1, dKodu);
-			update.setString(2, dAdi);
-			update.setString(3, dIcerik);
+			
 			
 			update.executeUpdate();
 			update.close();
